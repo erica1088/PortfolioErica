@@ -24,6 +24,7 @@ import {
 import { motion } from "framer-motion";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 
+// Animación de los componentes Chakra UI
 const MotionBox = motion(Box);
 const MotionFormControl = motion(FormControl);
 
@@ -105,9 +106,7 @@ const ContactForm = () => {
       bgPosition="center"
       p={4}
     >
-      {/* Contenedor principal Flex */}
       <Flex direction={{ base: "column", md: "row" }} w="100%" maxW="1200px">
-        {/* Columna de texto (mover hacia arriba en móvil) */}
         <Box
           w={{ base: "100%", md: "50%" }}
           p={{ base: 6, md: 12 }}
@@ -126,7 +125,6 @@ const ContactForm = () => {
           </Text>
         </Box>
 
-        {/* Columna de formulario */}
         <MotionBox
           bg={bgGlass}
           backdropFilter="blur(12px)"
@@ -140,7 +138,7 @@ const ContactForm = () => {
         >
           <form onSubmit={handleSubmit}>
             <Stack spacing={6}>
-              {/* Animaciones por campo */}
+              {/* Nombre */}
               <MotionFormControl
                 isInvalid={isInvalid("name")}
                 isRequired
@@ -161,6 +159,7 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Email */}
               <MotionFormControl
                 isInvalid={isInvalid("email")}
                 isRequired
@@ -182,6 +181,7 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Mensaje */}
               <MotionFormControl
                 isInvalid={isInvalid("message")}
                 isRequired
@@ -203,6 +203,7 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Botón Enviar */}
               <Flex justify="center">
                 <Button
                   type="submit"
