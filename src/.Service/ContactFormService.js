@@ -1,6 +1,6 @@
-// src/services/contactFormService.js
+
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../auth/firebase"; // o "../firebaseConfig"
+import { db } from "../auth/firebase"; 
 
 export const sendMessage = async (formData) => {
   try {
@@ -12,4 +12,6 @@ export const sendMessage = async (formData) => {
     console.error("Error al enviar el mensaje: ", error);
     throw error;
   }
-};
+
+  return messages;
+}

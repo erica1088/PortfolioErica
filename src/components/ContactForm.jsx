@@ -64,7 +64,7 @@ const ContactForm = () => {
     }
 
     try {
-      await addDoc(collection(db, "mensajes"), {
+      await addDoc(collection(db, "messages"), {
         ...formData,
         createdAt: Timestamp.now(),
       });
