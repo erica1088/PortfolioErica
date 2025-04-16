@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { db } from "../firebase/Config";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { sendMessage } from "../services/contactFormService"; // 👉 servicio externo
 import {
   Box,
   FormControl,
@@ -24,7 +23,6 @@ import {
 import { motion } from "framer-motion";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 
-// Animación de los componentes Chakra UI
 const MotionBox = motion(Box);
 const MotionFormControl = motion(FormControl);
 
@@ -64,13 +62,10 @@ const ContactForm = () => {
     }
 
     try {
-      await addDoc(collection(db, "mensajes"), {
-        ...formData,
-        createdAt: Timestamp.now(),
-      });
+      await sendMessage(formData); // ✅ usamos el servicio externo
 
-      setFormData({ name: "", email: "", message: "" });
-      setTouched({ name: false, email: false, message: false });
+      setFormData({ name: "", email: "", mensaje: "" });
+      setTouched({ name: false, email: false, mensaje: false });
 
       onOpen();
       setTimeout(() => onClose(), 4000);
@@ -86,7 +81,7 @@ const ContactForm = () => {
     }
   };
 
-  // 🌗 Modo oscuro
+  // Estilos de color según el modo
   const bgGlass = useColorModeValue(
     "rgba(255, 255, 255, 0.25)",
     "rgba(26, 32, 44, 0.55)"
@@ -119,7 +114,7 @@ const ContactForm = () => {
             fontSize={{ base: "sm", md: "xl" }}
             color={textColor}
             mb={4}
-            fontFamily="Roboto, Sans-Serif;"
+            fontFamily="Roboto, Sans-Serif"
           >
             ¿Querés contactarme? Escribime.
           </Text>
@@ -138,7 +133,6 @@ const ContactForm = () => {
         >
           <form onSubmit={handleSubmit}>
             <Stack spacing={6}>
-              {/* Nombre */}
               <MotionFormControl
                 isInvalid={isInvalid("name")}
                 isRequired
@@ -159,7 +153,6 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
-              {/* Email */}
               <MotionFormControl
                 isInvalid={isInvalid("email")}
                 isRequired
@@ -181,7 +174,6 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
-              {/* Mensaje */}
               <MotionFormControl
                 isInvalid={isInvalid("message")}
                 isRequired
@@ -192,7 +184,7 @@ const ContactForm = () => {
                 <Textarea
                   name="message"
                   placeholder="Mensaje"
-                  value={formData.message}
+                  value={formData.mensaje}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   variant="flushed"
@@ -203,7 +195,6 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
-              {/* Botón Enviar */}
               <Flex justify="center">
                 <Button
                   type="submit"
@@ -222,7 +213,7 @@ const ContactForm = () => {
         </MotionBox>
       </Flex>
 
-      {/* Modal de confirmación */}
+      {/* Modal de éxito */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
