@@ -33,12 +33,12 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: "",
+    mensaje: "",
   });
   const [touched, setTouched] = useState({
     name: false,
     email: false,
-    message: false,
+    mensaje: false,
   });
 
   const handleChange = (e) =>
@@ -48,9 +48,9 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setTouched({ name: true, email: true, message: true });
+    setTouched({ name: true, email: true, mensaje: true });
 
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.mensaje) {
       toast({
         title: "Campos incompletos",
         description: "Por favor, completa todos los campos.",
@@ -73,7 +73,7 @@ const ContactForm = () => {
       console.error("Error al guardar el mensaje:", err);
       toast({
         title: "Error",
-        description: `No se pudo guardar el mensaje 😢. Error: ${err.message}`,
+        description: `No se pudo guardar el mensaje 😢. Error: ${err.mensaje}`,
         status: "error",
         duration: 4000,
         isClosable: true,
@@ -175,14 +175,14 @@ const ContactForm = () => {
               </MotionFormControl>
 
               <MotionFormControl
-                isInvalid={isInvalid("message")}
+                isInvalid={isInvalid("mensaje")}
                 isRequired
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
               >
                 <Textarea
-                  name="message"
+                  name="mensaje"
                   placeholder="Mensaje"
                   value={formData.mensaje}
                   onChange={handleChange}
