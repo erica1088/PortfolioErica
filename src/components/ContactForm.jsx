@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { sendMessage } from "../services/contactFormService"; // 👉 servicio externo
+import { db } from "../firebase/Config";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import {
   Box,
   FormControl,
@@ -23,6 +24,7 @@ import {
 import { motion } from "framer-motion";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 
+// Animación de los componentes Chakra UI
 const MotionBox = motion(Box);
 const MotionFormControl = motion(FormControl);
 
@@ -33,12 +35,12 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    mensaje: "",
+    message: "",
   });
   const [touched, setTouched] = useState({
     name: false,
     email: false,
-    mensaje: false,
+    message: false,
   });
 
   const handleChange = (e) =>
@@ -48,9 +50,9 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setTouched({ name: true, email: true, mensaje: true });
+    setTouched({ name: true, email: true, message: true });
 
-    if (!formData.name || !formData.email || !formData.mensaje) {
+    if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Campos incompletos",
         description: "Por favor, completa todos los campos.",
@@ -62,10 +64,13 @@ const ContactForm = () => {
     }
 
     try {
-      await sendMessage(formData); // ✅ usamos el servicio externo
+      await addDoc(collection(db, "mensajes"), {
+        ...formData,
+        createdAt: Timestamp.now(),
+      });
 
-      setFormData({ name: "", email: "", mensaje: "" });
-      setTouched({ name: false, email: false, mensaje: false });
+      setFormData({ name: "", email: "", message: "" });
+      setTouched({ name: false, email: false, message: false });
 
       onOpen();
       setTimeout(() => onClose(), 4000);
@@ -73,7 +78,7 @@ const ContactForm = () => {
       console.error("Error al guardar el mensaje:", err);
       toast({
         title: "Error",
-        description: `No se pudo guardar el mensaje 😢. Error: ${err.mensaje}`,
+        description: `No se pudo guardar el mensaje 😢. Error: ${err.message}`,
         status: "error",
         duration: 4000,
         isClosable: true,
@@ -81,7 +86,7 @@ const ContactForm = () => {
     }
   };
 
-  // Estilos de color según el modo
+  // 🌗 Modo oscuro
   const bgGlass = useColorModeValue(
     "rgba(255, 255, 255, 0.25)",
     "rgba(26, 32, 44, 0.55)"
@@ -114,7 +119,7 @@ const ContactForm = () => {
             fontSize={{ base: "sm", md: "xl" }}
             color={textColor}
             mb={4}
-            fontFamily="Roboto, Sans-Serif"
+            fontFamily="Roboto, Sans-Serif;"
           >
             ¿Querés contactarme? Escribime.
           </Text>
@@ -133,6 +138,7 @@ const ContactForm = () => {
         >
           <form onSubmit={handleSubmit}>
             <Stack spacing={6}>
+              {/* Nombre */}
               <MotionFormControl
                 isInvalid={isInvalid("name")}
                 isRequired
@@ -153,6 +159,7 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Email */}
               <MotionFormControl
                 isInvalid={isInvalid("email")}
                 isRequired
@@ -174,17 +181,18 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Mensaje */}
               <MotionFormControl
-                isInvalid={isInvalid("mensaje")}
+                isInvalid={isInvalid("message")}
                 isRequired
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
               >
                 <Textarea
-                  name="mensaje"
+                  name="message"
                   placeholder="Mensaje"
-                  value={formData.mensaje}
+                  value={formData.message}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   variant="flushed"
@@ -195,6 +203,7 @@ const ContactForm = () => {
                 <FormErrorMessage>Este campo es obligatorio.</FormErrorMessage>
               </MotionFormControl>
 
+              {/* Botón Enviar */}
               <Flex justify="center">
                 <Button
                   type="submit"
@@ -213,7 +222,7 @@ const ContactForm = () => {
         </MotionBox>
       </Flex>
 
-      {/* Modal de éxito */}
+      {/* Modal de confirmación */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
