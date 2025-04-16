@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { CheckCircleIcon } from "@chakra-ui/icons";
+import { sendMessage } from "../.Service/ContactFormService";
 
 // Animación de los componentes Chakra UI
 const MotionBox = motion(Box);
@@ -51,7 +52,7 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({ name: true, email: true, message: true });
-
+  
     if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Campos incompletos",
@@ -62,16 +63,13 @@ const ContactForm = () => {
       });
       return;
     }
-
+  
     try {
-      await addDoc(collection(db, "messages"), {
-        ...formData,
-        createdAt: Timestamp.now(),
-      });
-
+      await sendMessage(formData); // ✅ USO DEL HELPER
+  
       setFormData({ name: "", email: "", message: "" });
       setTouched({ name: false, email: false, message: false });
-
+  
       onOpen();
       setTimeout(() => onClose(), 4000);
     } catch (err) {
