@@ -1,6 +1,6 @@
 
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../auth/firebase"; 
+import { db } from "../firebase/Config"; 
 
 export const sendMessage = async (formData) => {
   try {
@@ -13,5 +13,5 @@ export const sendMessage = async (formData) => {
     throw error;
   }
 
-  return messages;
+
 }
