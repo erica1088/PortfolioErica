@@ -9,9 +9,9 @@ export const sendEmail = async (formData) => {
     message,
   };
 
-  const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-  const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+  const serviceID = process.env.VITE_EMAILJS_SERVICE_ID;
+  const templateID = process.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = process.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   // Verifica si las variables de entorno están disponibles
   if (!serviceID || !templateID || !publicKey) {
