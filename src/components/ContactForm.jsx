@@ -54,10 +54,10 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({ name: true, email: true, message: true });
-  
-    const serviceID = process.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateID = process.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = process.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    
 
     // Validar campos vacíos
     if (!formData.name || !formData.email || !formData.message) {
@@ -71,7 +71,7 @@ const ContactForm = () => {
       return;
     }
   
-    // Leer variables de entorno
+   
    
   
     // Verificar si las variables están bien definidas
