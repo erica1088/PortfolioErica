@@ -23,7 +23,6 @@ import {
 import { motion } from "framer-motion";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 
-
 const MotionBox = motion(Box);
 const MotionFormControl = motion(FormControl);
 
@@ -31,8 +30,6 @@ const ContactForm = () => {
   const form = useRef();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-
 
   const [formData, setFormData] = useState({
     name: "",
@@ -57,7 +54,6 @@ const ContactForm = () => {
     const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-    
 
     // Validar campos vacíos
     if (!formData.name || !formData.email || !formData.message) {
@@ -70,13 +66,10 @@ const ContactForm = () => {
       });
       return;
     }
-  
-   
-   
-  
+
     // Verificar si las variables están bien definidas
     if (!serviceID || !templateID || !publicKey) {
-      console.log("Env")
+      console.log("Env");
       console.error("Faltan variables de entorno:", {
         serviceID,
         templateID,
@@ -84,26 +77,22 @@ const ContactForm = () => {
       });
       toast({
         title: "Error de configuración",
-        description: "Faltan datos para enviar el formulario. Contactá al administrador.",
+        description:
+          "Faltan datos para enviar el formulario. Contactá al administrador.",
         status: "error",
         duration: 4000,
         isClosable: true,
       });
       return;
     }
-  
+
     // Enviar email con EmailJS
     try {
-      await emailjs.sendForm(
-        serviceID,
-        templateID,
-        form.current,
-        publicKey
-      );
-  
+      await emailjs.sendForm(serviceID, templateID, form.current, publicKey);
+
       setFormData({ name: "", email: "", message: "" });
       setTouched({ name: false, email: false, message: false });
-  
+
       onOpen();
       setTimeout(() => onClose(), 4000);
     } catch (err) {
@@ -117,7 +106,7 @@ const ContactForm = () => {
       });
     }
   };
-  
+
   const bgGlass = useColorModeValue(
     "rgba(255, 255, 255, 0.25)",
     "rgba(26, 32, 44, 0.55)"
@@ -157,11 +146,16 @@ const ContactForm = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
+          {/* Campos ocultos necesarios para EmailJS */}
+          <input type="hidden" name="user_name" value={formData.name} />
+          <input type="hidden" name="user_email" value={formData.email} />
+          <input type="hidden" name="reply_to" value={formData.email} />
+
           <Stack spacing={6}>
             {/* Nombre */}
             <MotionFormControl isInvalid={isInvalid("name")} isRequired>
               <Input
-                name="user_name"
+                name="name"
                 placeholder="Nombre"
                 value={formData.name}
                 onChange={handleChange}
@@ -176,7 +170,7 @@ const ContactForm = () => {
             {/* Email */}
             <MotionFormControl isInvalid={isInvalid("email")} isRequired>
               <Input
-                name="user_email"
+                name="email"
                 type="email"
                 placeholder="Email"
                 value={formData.email}
@@ -227,12 +221,19 @@ const ContactForm = () => {
         motionPreset="slideInBottom"
       >
         <ModalOverlay />
-        <ModalContent borderRadius="xl">
-          <ModalHeader>¡Mensaje enviado con éxito!</ModalHeader>
+        <ModalContent
+          borderRadius="xl"
+          maxW={{ base: "90%", sm: "400px" }}
+          w="100%"
+          p={{ base: 4, md: 6 }}
+        >
+          <ModalHeader fontSize={{ base: "lg", md: "xl" }}>
+            ¡Mensaje enviado con éxito!
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody textAlign="center">
-            <CheckCircleIcon w={16} h={16} color="green.300" mb={4} />
-            <Text color="gray.500">
+            <CheckCircleIcon w={12} h={12} color="green.300" mb={3} />
+            <Text color="gray.500" fontSize={{ base: "sm", md: "md" }}>
               ¡Gracias por escribirme! Te responderé pronto.
             </Text>
           </ModalBody>
