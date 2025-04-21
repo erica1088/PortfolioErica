@@ -161,7 +161,7 @@ const ContactForm = () => {
             {/* Nombre */}
             <MotionFormControl isInvalid={isInvalid("name")} isRequired>
               <Input
-                name="name"
+                name="user_name"
                 placeholder="Nombre"
                 value={formData.name}
                 onChange={handleChange}
@@ -176,7 +176,7 @@ const ContactForm = () => {
             {/* Email */}
             <MotionFormControl isInvalid={isInvalid("email")} isRequired>
               <Input
-                name="email"
+                name="user_email"
                 type="email"
                 placeholder="Email"
                 value={formData.email}
