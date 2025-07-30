@@ -142,7 +142,7 @@ function Hero() {
               borderColor="#CCCCFF"
               leftIcon={<DownloadIcon boxSize={4} />}
               as="a"
-              href="/cv-erica-acosta.pdf"
+              href="/EricaAcosta-cv.pdf"
               download
               _hover={{ bg: "gray.100" }}
               boxShadow="md"
